@@ -1,0 +1,660 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtDlgs, Vcl.ExtCtrls, ShellAPI,
+  Vcl.XPMan, Vcl.Menus;
+
+type
+  TCreatorForm = class(TForm)
+    x8simb: TButton;
+    x1simb: TButton;
+    x2simb: TButton;
+    x3simb: TButton;
+    x4simb: TButton;
+    x5simb: TButton;
+    x6simb: TButton;
+    x7simb: TButton;
+    x9simb: TButton;
+    SaveTextFileDialog1: TSaveTextFileDialog;
+    SaveWaySel: TButton;
+    DigCheck: TCheckBox;
+    SaveWayEdit: TEdit;
+    SaveWayLbl: TLabel;
+    CaseSence: TCheckBox;
+    CoffeeBtn: TButton;
+    ThankBtn: TButton;
+    XPManifest1: TXPManifest;
+    LettersCheck: TCheckBox;
+    OptMenus: TMainMenu;
+    Thanks: TMenuItem;
+    Lang: TMenuItem;
+    procedure x8simbClick(Sender: TObject);
+    procedure x3simbClick(Sender: TObject);
+    procedure x9simbClick(Sender: TObject);
+    procedure x2simbClick(Sender: TObject);
+    procedure x1simbClick(Sender: TObject);
+    procedure SaveWayEditChange(Sender: TObject);
+    procedure SaveWaySelClick(Sender: TObject);
+    procedure DigCheckClick(Sender: TObject);
+    procedure x4simbClick(Sender: TObject);
+    procedure x5simbClick(Sender: TObject);
+    procedure x6simbClick(Sender: TObject);
+    procedure x7simbClick(Sender: TObject);
+    procedure CoffeeBtnClick(Sender: TObject);
+    procedure ThankBtnClick(Sender: TObject);
+    procedure LettersCheckClick(Sender: TObject);
+    procedure ThanksClick(Sender: TObject);
+    procedure LangClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+const
+  DonateLink =  'https://sites.google.com/view/little-beggar/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F';
+
+var
+  CreatorForm: TCreatorForm;
+  sd, b : string;
+  SMin, SMax : integer;
+
+implementation
+
+{$R *.dfm}
+
+Function comparationFull (s :integer; b: string) :String;
+Begin
+	if s = 0
+  then b := '0'
+  else
+    case s of
+      1 : b:='1';
+      2 : b:='2';
+      3 : b:='3';
+      4 : b:='4';
+      5 : b:='5';
+      6 : b:='6';
+      7 : b:='7';
+      8 : b:='8';
+      9 : b:='9';
+        10 : b:='a';
+        11 : b:='b';
+        12 : b:='c';
+        13 : b:='d';
+        14 : b:='e';
+        15 : b:='f';
+        16 : b:='g';
+        17 : b:='h';
+        18 : b:='i';
+        19 : b:='j';
+        20 : b:='k';
+        21 : b:='l';
+        22 : b:='m';
+        23 : b:='n';
+        24 : b:='o';
+        25 : b:='p';
+        26 : b:='q';
+        27 : b:='r';
+        28 : b:='s';
+        29 : b:='t';
+        30 : b:='u';
+        31 : b:='v';
+        32 : b:='w';
+        33 : b:='x';
+        34 : b:='y';
+        35 : b:='z';
+          36 : b:='A';
+          37 : b:='B';
+          38 : b:='C';
+          39 : b:='D';
+          40 : b:='E';
+          41 : b:='F';
+          42 : b:='G';
+          43 : b:='H';
+          44 : b:='I';
+          45 : b:='J';
+          46 : b:='K';
+          47 : b:='L';
+          48 : b:='M';
+          49 : b:='N';
+          50 : b:='O';
+          51 : b:='P';
+          52 : b:='Q';
+          53 : b:='R';
+          54 : b:='S';
+          55 : b:='T';
+          56 : b:='U';
+          57 : b:='V';
+          58 : b:='W';
+          59 : b:='X';
+          60 : b:='Y';
+          61 : b:='Z';
+    end;
+  Result:=b;
+end;
+
+function Generator : string;
+var i : integer;
+    bTemp : string;
+begin
+  for i := SMin to SMax do
+  begin
+   // Writeln(f, comparationFull (s, b));
+   // c:=c+1;
+    bTemp := comparationFull (i, b);
+    b := b + bTemp;
+  end;
+  { for i := MinVal to MaxVal do
+    result := comparationFull (i, b);}
+end;
+
+Procedure SetMinMax;
+begin
+  b := '';
+  SMin := 0;
+  if CreatorForm.DigCheck.Checked=true
+    then SMax := 9
+    else if CreatorForm.CaseSence.Checked=true
+      then SMax := 61
+      else SMax := 35;
+  if CreatorForm.LettersCheck.Checked = true
+    then SMin := 10;
+end;
+
+Procedure EndMessage(WordLong, GenTime, WordCount :string);
+begin
+    if CreatorForm.Thanks.Caption = 'Благодарности'
+    then ShowMessage('Генерация завершена!'+#13+#10+'создано '+WordLong+'x символьных ключей - '+WordCount+#13+#10+'Время выполнения - '+GenTime)
+    else ShowMessage('Generation completed!'+#13+#10+'created '+WordLong+'x character keys - '+WordCount+#13+#10+'lead time - '+GenTime)
+end;
+
+{########################}
+procedure TCreatorForm.CoffeeBtnClick(Sender: TObject);
+begin
+  ShellExecute(0, 'open',DonateLink, '', '', SW_SHOWNORMAL);
+end;
+
+procedure TCreatorForm.ThankBtnClick(Sender: TObject);
+begin
+  ShellExecute(0, 'open',DonateLink, '', '', SW_SHOWNORMAL);
+end;
+
+procedure TCreatorForm.ThanksClick(Sender: TObject);
+begin
+  ShellExecute(0, 'open',DonateLink, '', '', SW_SHOWNORMAL);
+end;
+{########################}
+
+
+procedure TCreatorForm.x1simbClick(Sender: TObject);
+Var
+  s, c : integer;
+  F : textFile;
+  StartTime, EndTime : ttime;
+  bTemp : string;
+begin
+  StartTime:=now;
+  SetMinMax;
+  c:=0;
+  AssignFile(f, sd);
+  Rewrite(f);
+  Writeln(f,b);
+  Append(f);
+
+  for s := SMin to SMax do
+  begin
+    c:=c+1;
+    Writeln(f, comparationFull (s, b));
+  end;
+
+  EndTime:=now;
+  EndMessage('1', timeToStr(EndTime-StartTime), inttostr(c));
+  CloseFile(F);
+end;
+
+procedure TCreatorForm.x2simbClick(Sender: TObject);
+Var
+  s, s0, s1,  c : integer;
+  b, b0, b1:string;
+  F : textFile;
+  StartTime, EndTime : ttime;
+begin
+  StartTime:=now;
+  SetMinMax;
+  c:=0;
+  AssignFile(f, sd);
+  Rewrite(f);
+  Writeln(f,b);
+  Append(f);
+
+  for s := SMin to SMax do
+  begin
+   	b0:= comparationFull (s, b);
+    for s1 := SMin to SMax do
+    begin
+	   b1:= comparationFull (s1, b);
+	   b:=b0+b1;
+     Writeln(f,b);
+     c:=c+1;
+    end;
+  end;
+
+  EndTime:=now;
+  EndMessage('2', timeToStr(EndTime-StartTime), inttostr(c));
+  CloseFile(F);
+end;
+
+procedure TCreatorForm.SaveWaySelClick(Sender: TObject);
+begin
+SaveTextFileDialog1.Filter := 'Text files (*.txt)|*.TXT';
+ if SaveTextFileDialog1.Execute then
+   SaveWayEdit.Text := (SaveTextFileDialog1.FileName)+'.txt';
+end;
+
+procedure TCreatorForm.x8simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3, s4, s5, s6,s7, c : integer;
+  b, b0, b1, b2, b3, b4,b5, b6, b7 :string;
+  F : textFile;
+  tm, t2, t1: ttime;
+begin
+  t1:=now;
+  smin:=0;
+
+  if DigCheck.Checked=true
+    then smax:=9
+    else if CaseSence.Checked=true
+      then smax:=61
+      else smax:=35;
+
+  if LettersCheck.Checked = true then smin:=10;
+
+  c:=0;
+  AssignFile(f, sd);
+  Rewrite(f);
+  Writeln(f,b);
+  Append(f);
+
+  for s := smin to smax do
+    begin
+      b0:= comparationFull (s, b);
+      for s1 := smin to smax do
+      begin
+	      b1:= comparationFull (s1, b);
+	      for s2 := smin to smax do
+        begin
+	        b2:= comparationFull (s2, b);
+	        for s3 := smin to smax do
+          begin
+	          b3:= comparationFull (s3, b);
+	          for s4 := smin to smax do
+            begin
+	            b4:= comparationFull (s4, b);
+  	          for s5 := smin to smax do
+              begin
+	              b5:= comparationFull (s5, b);
+	              for s6 := smin to smax do
+                begin
+	                b6:= comparationFull (s6, b);
+                  for s7 := smin to smax do
+		              begin
+		                b7:= comparationFull (s7, b);
+  		              b:=b0+b1+b2+b3+b4+b5+b6+b7;
+                    Writeln(f,b);
+		                c:=c+1;
+		              end;
+	              end;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+
+  t2:=now;
+  tm:=t2-t1;
+  ShowMessage('генерация завершена!'+#13+#10+'создано 8x символьных ключей - '+inttostr(c)+#13+#10+'Время выполнения - '+timeToStr(tm));
+  CloseFile(F);
+end;
+
+procedure TCreatorForm.x3simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2,  c: integer;
+  b, b0, b1, b2 :string;
+  F : textFile;
+begin
+  smin:=0;
+  if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+  if LettersCheck.Checked = true then smin:=10;
+  c:=0;
+  AssignFile(f, sd);
+  Rewrite(f);
+  Writeln(f,b);
+  Append(f);
+
+  for s := smin to smax do
+  begin
+	  b0:= comparationFull (s, b);
+    for s1 := smin to smax do
+    begin
+	    b1:= comparationFull (s1, b);
+		  for s2 := smin to smax do
+		  begin
+		    b2:= comparationFull (s2, b);
+		    b:=b0+b1+b2;
+		    Writeln(f,b);
+		    c:=c+1;
+		  end;
+	  end;
+  end;
+  ShowMessage('генерация завершена!'+#13+#10+'создано 3x символьных ключей - '+(inttostr(c)));
+  CloseFile(F);
+end;
+
+procedure TCreatorForm.x4simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3,  c : integer;
+  b, b0, b1, b2,b3 :string;
+  F : textFile;
+begin
+smin:=0;
+if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+if LettersCheck.Checked = true then smin:=10;
+c:=0;
+AssignFile(f, sd);
+Rewrite(f);
+Writeln(f,b);
+Append(f);
+
+for s := smin to smax do begin
+	b0:= comparationFull (s, b);
+  for s1 := smin to smax do begin
+	b1:= comparationFull (s1, b);
+	for s2 := smin to smax do begin
+	b2:= comparationFull (s2, b);
+		for s3 := smin to smax do
+		begin
+		b3:= comparationFull (s3, b);
+		b:=b0+b1+b2+b3;
+		Writeln(f,b);
+		c:=c+1;
+		end;
+	end;
+  end;
+end;
+ShowMessage('генерация завершена!'+#13+#10+'создано 4x символьных ключей - '+(inttostr(c)));
+CloseFile(F);
+end;
+
+procedure TCreatorForm.x5simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3, s4, c : integer;
+  b, b0, b1, b2, b3, b4 :string;
+  F : textFile;
+  tm, t2, t1: ttime;
+begin
+t1:=now;
+smin:=0;
+if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+if LettersCheck.Checked = true then smin:=10;
+c:=0;
+AssignFile(f, sd);
+Rewrite(f);
+Writeln(f,b);
+Append(f);
+
+for s := smin to smax do begin
+	b0:= comparationFull (s, b);
+  for s1 := smin to smax do begin
+	b1:= comparationFull (s1, b);
+	for s2 := smin to smax do begin
+	b2:= comparationFull (s2, b);
+	for s3 := smin to smax do begin
+	b3:= comparationFull (s3, b);
+		for s4 := smin to smax do
+		begin
+		b4:= comparationFull (s4, b);
+		b:=b0+b1+b2+b3+b4;
+		Writeln(f,b);
+		c:=c+1;
+		end;
+	end;
+  end;
+end;
+end;
+t2:=now;
+tm:=t2-t1;
+ShowMessage('генерация завершена!'+#13+#10+'создано 5x символьных ключей - '+inttostr(c)+#13+#10+'Время выполнения - '+timeToStr(tm));
+CloseFile(F);
+end;
+
+procedure TCreatorForm.x6simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3, s4, s5, c : integer;
+  b, b0, b1, b2, b3, b4,b5 :string;
+  F : textFile;
+  tm, t2, t1: ttime;
+begin
+t1:=now;
+smin:=0;
+if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+if LettersCheck.Checked = true then smin:=10;
+c:=0;
+AssignFile(f, sd);
+Rewrite(f);
+Writeln(f,b);
+Append(f);
+
+for s := smin to smax do begin
+	b0:= comparationFull (s, b);
+  for s1 := smin to smax do begin
+	b1:= comparationFull (s1, b);
+	for s2 := smin to smax do begin
+	b2:= comparationFull (s2, b);
+	for s3 := smin to smax do begin
+	b3:= comparationFull (s3, b);
+	for s4 := smin to smax do begin
+	b4:= comparationFull (s4, b);
+		for s5 := smin to smax do
+		begin
+		b5:= comparationFull (s5, b);
+		b:=b0+b1+b2+b3+b4+b5;
+		Writeln(f,b);
+		c:=c+1;
+		end;
+	end;
+  end;
+end;
+end;
+end;
+t2:=now;
+tm:=t2-t1;
+ShowMessage('генерация завершена!'+#13+#10+'создано 6x символьных ключей - '+inttostr(c)+#13+#10+'Время выполнения - '+timeToStr(tm));
+CloseFile(F);
+end;
+
+procedure TCreatorForm.x7simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3, s4, s5, s6, c : integer;
+  b, b0, b1, b2, b3, b4,b5, b6 :string;
+  F : textFile;
+  tm, t2, t1: ttime;
+begin
+t1:=now;
+smin:=0;
+if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+if LettersCheck.Checked = true then smin:=10;
+c:=0;
+AssignFile(f, sd);
+Rewrite(f);
+Writeln(f,b);
+Append(f);
+
+for s := smin to smax do begin
+	b0:= comparationFull (s, b);
+  for s1 := smin to smax do begin
+	b1:= comparationFull (s1, b);
+	for s2 := smin to smax do begin
+	b2:= comparationFull (s2, b);
+	for s3 := smin to smax do begin
+	b3:= comparationFull (s3, b);
+	for s4 := smin to smax do begin
+	b4:= comparationFull (s4, b);
+	for s5 := smin to smax do begin
+	b5:= comparationFull (s5, b);
+		for s6 := smin to smax do
+		begin
+		b6:= comparationFull (s6, b);
+		b:=b0+b1+b2+b3+b4+b5+b6;
+		Writeln(f,b);
+		c:=c+1;
+		end;
+	end;
+  end;
+  end;
+end;
+end;
+end;
+t2:=now;
+tm:=t2-t1;
+ShowMessage('генерация завершена!'+#13+#10+'создано 7x символьных ключей - '+inttostr(c)+#13+#10+'Время выполнения - '+timeToStr(tm));
+CloseFile(F);
+end;
+
+procedure TCreatorForm.x9simbClick(Sender: TObject);
+Var
+  s, s0, s1, s2, s3, s4, s5, s6,s7, s8, c : integer;
+  b, b0, b1, b2, b3, b4,b5, b6, b7, b8 :string;
+  F : textFile;
+  tm, t2, t1: ttime;
+begin
+t1:=now;
+smin:=0;
+if DigCheck.Checked=true then smax:=9 else if CaseSence.Checked=true then smax:=61 else smax:=35;
+if LettersCheck.Checked = true then smin:=10;
+c:=0;
+AssignFile(f, sd);
+Rewrite(f);
+Writeln(f,b);
+Append(f);
+
+for s := smin to smax do begin
+	b0:= comparationFull (s, b);
+  for s1 := smin to smax do begin
+	b1:= comparationFull (s1, b);
+	for s2 := smin to smax do begin
+	b2:= comparationFull (s2, b);
+	for s3 := smin to smax do begin
+	b3:= comparationFull (s3, b);
+	for s4 := smin to smax do begin
+	b4:= comparationFull (s4, b);
+	for s5 := smin to smax do begin
+	b5:= comparationFull (s5, b);
+	for s6 := smin to smax do begin
+	b6:= comparationFull (s6, b);
+	for s7 := smin to smax do begin
+	b7:= comparationFull (s7, b);
+		for s8 := smin to smax do
+		begin
+		b8:= comparationFull (s8, b);
+		b:=b0+b1+b2+b3+b4+b5+b6+b7+b8;
+		Writeln(f,b);
+		c:=c+1;
+		end;
+	end;
+  end;
+  end;
+end;
+end;
+end;
+  end;
+end;
+t2:=now;
+tm:=t2-t1;
+ShowMessage('генерация завершена!'+#13+#10+'создано 9x символьных ключей - '+inttostr(c)+#13+#10+'Время выполнения - '+timeToStr(tm));
+CloseFile(F);
+end;
+
+procedure TCreatorForm.LettersCheckClick(Sender: TObject);
+begin
+  if LettersCheck.Checked = true then DigCheck.Enabled:=false;
+  if LettersCheck.Checked = false then DigCheck.Enabled:=true;
+  if LettersCheck.Checked = true then CaseSence.Enabled:=true;
+end;
+
+procedure TCreatorForm.DigCheckClick(Sender: TObject);
+begin
+  if DigCheck.Checked = true then CaseSence.Enabled:=false;
+  if DigCheck.Checked = false then CaseSence.Enabled:=true;
+  if DigCheck.Checked = true then LettersCheck.Enabled:=false;
+  if DigCheck.Checked = false then LettersCheck.Enabled:=true;
+end;
+
+procedure TCreatorForm.SaveWayEditChange(Sender: TObject);
+begin
+  x1simb.enabled:=true;
+  x2simb.enabled:=true;
+  x3simb.enabled:=true;
+  x4simb.enabled:=true;
+  x5simb.enabled:=true;
+  x6simb.enabled:=true;
+  x7simb.enabled:=true;
+  x8simb.enabled:=true;
+  x9simb.enabled:=true;
+  sd:=SaveWayEdit.Text;
+end;
+
+procedure TCreatorForm.LangClick(Sender: TObject);
+var selLang : integer;
+begin
+  if Thanks.Caption = 'Благодарности'
+    then selLang := 0
+    else selLang := 1;
+  if selLang = 1 then
+    begin
+      Thanks.Caption := 'Благодарности';
+      DigCheck.Caption := 'Только числовые значения';
+      SaveWaySel.Caption := 'Выбрать путь сохранения';
+      LettersCheck.Caption := 'Только буквы';
+      CaseSence.Caption := 'Учитывать регистр';
+      SaveWayLbl.Caption := 'Путь сохранения:';
+      x1simb.Caption := '1 символ';
+      x2simb.Caption := '2 символа';
+      x3simb.Caption := '3 символа';
+      x4simb.Caption := '4 символа';
+      x5simb.Caption := '5 символов';
+      x6simb.Caption := '6 символов';
+      x7simb.Caption := '7 символов';
+      x8simb.Caption := '8 символов';
+      x9simb.Caption := '9 символов';
+      CoffeeBtn.Caption := 'Купить кофе';
+      ThankBtn.Caption := 'Сказать "спасибо"';
+    end else
+    begin
+      Thanks.Caption := 'Thanks';
+      DigCheck.Caption := 'Digits only';
+      SaveWaySel.Caption := 'Save to';
+      LettersCheck.Caption := 'Letters only';
+      CaseSence.Caption := 'Case sensitive';
+      SaveWayLbl.Caption := 'Will be saved as:';
+      x1simb.Caption := '1x symbols';
+      x2simb.Caption := '2x symbols';
+      x3simb.Caption := '3x symbols';
+      x4simb.Caption := '4x symbols';
+      x5simb.Caption := '5x symbols';
+      x6simb.Caption := '6x symbols';
+      x7simb.Caption := '7x symbols';
+      x8simb.Caption := '8x symbols';
+      x9simb.Caption := '9x symbols';
+      CoffeeBtn.Caption := 'Buy a coffee';
+      ThankBtn.Caption := 'Say "thanks"';
+    end;
+
+
+end;
+
+end.
