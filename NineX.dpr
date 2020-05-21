@@ -2,7 +2,7 @@ program NineX;
 
 uses
   Vcl.Forms,
-  Unit2 in 'Unit2.pas' {CreatorForm},
+  Main in 'Main.pas' {CreatorForm},
   Vcl.Themes,
   Vcl.Styles;
 
